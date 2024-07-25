@@ -1,7 +1,6 @@
 
 def jobName = env.JOB_NAME.split("/")[-1]
-def GIT_PROJECT = "FIXME"
-def GitRepo = "FIXME"
+def action = "FIXME"
 def FEATURE_BRANCH = "FIXME"
 def CURRENT_BRANCH = "FIXME"
 
@@ -23,13 +22,12 @@ pipeline{
     triggers {
         GenericTrigger(
          genericVariables: [
-          [key: 'GIT_PROJECT', value: '$.pullRequest.toRef.repository.project.key'],
-          [key: 'GitRepo', value: '$.pullRequest.toRef.repository.slug'],
-          [key: 'FEATURE_BRANCH', value: '$.pullRequest.fromRef.displayId'],
-          [key: 'CURRENT_BRANCH', value: '$.pullRequest.toRef.displayId']
+          [key: 'action', value: '$.action'],
+          [key: 'FEATURE_BRANCH', value: '$.pull_request.head.ref'],
+          [key: 'CURRENT_BRANCH', value: '$.pull_request.base.ref']
          ],
 
-         causeString: 'Triggered on $.eventKey',
+         causeString: 'Triggered on $action',
 
          token: 'abc123',
          tokenCredentialId: '',
@@ -41,22 +39,22 @@ pipeline{
 
          shouldNotFlatten: false,
 
-         regexpFilterText: 'Release-Pipeline-${GitRepo}-${GIT_PROJECT}-${CURRENT_BRANCH}',
-         regexpFilterExpression: jobName
+         regexpFilterText: '$action',
+         regexpFilterExpression: ^(opened|reopened|synchronize)$
         )
     }
 
     stages {
-        stage('Init') {
+        /* stage('Init') {
             steps {
                 timeout(time: 60, unit: 'SECONDS'){
                     input message: 'approve to build job'
                 }
             }
-        }
+        } */
         stage('Build'){
             steps {
-                echo "jobName: ${jobName}, GIT_PROJECT: ${GIT_PROJECT}, GitRepo: ${GitRepo}, FEATURE_BRANCH: ${FEATURE_BRANCH}, CURRENT_BRANCH: ${CURRENT_BRANCH}"
+                echo "jobName: ${jobName}, action: ${action}, FEATURE_BRANCH: ${FEATURE_BRANCH}, CURRENT_BRANCH: ${CURRENT_BRANCH}"
                 sh 'mvn clean package'
                 echo "Building ${branch}......"
                 //sh "/usr/local/bin/docker build . -t tomcatwebapp:${env.BUILD_ID}"
