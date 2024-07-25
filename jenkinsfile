@@ -1,3 +1,6 @@
+
+def jobName = env.JOB_NAME.split("/")[-1]
+
 pipeline{
     agent any
     tools {
@@ -8,8 +11,34 @@ pipeline{
         string(name: 'branch', defaultValue: 'master', description: 'github branch')
     }
 
-    triggers {
+    /* triggers {
         pollSCM('* * * * *')
+    } */
+
+    triggers {
+        GenericTrigger(
+         genericVariables: [
+          [key: 'GIT_PROJECT', value: '$.pullRequest.toRef.repository.project.key'],
+          [key: 'GitRepo', value: '$.pullRequest.toRef.repository.slug'],
+          [key: 'FEATURE_BRANCH', value: '$.pullRequest.fromRef.displayId'],
+          [key: 'CURRENT_BRANCH', value: '$.pullRequest.toRef.displayId']
+         ],
+
+         causeString: 'Triggered on $.eventKey',
+
+         token: 'abc123',
+         tokenCredentialId: '',
+
+         printContributedVariables: true,
+         printPostContent: true,
+
+         silentResponse: false,
+
+         shouldNotFlatten: false,
+
+         regexpFilterText: 'Release-Pipeline-${GitRepo}-${GIT_PROJECT}-${CURRENT_BRANCH}',
+         regexpFilterExpression: jobName
+        )
     }
 
     stages {
@@ -22,9 +51,10 @@ pipeline{
         }
         stage('Build'){
             steps {
+                echo "jobName: ${jobName}, GIT_PROJECT: ${GIT_PROJECT}, GitRepo: ${GitRepo}, FEATURE_BRANCH: ${FEATURE_BRANCH}, CURRENT_BRANCH: ${CURRENT_BRANCH}"
                 sh 'mvn clean package'
                 echo "Building ${branch}......"
-                sh "/usr/local/bin/docker build . -t tomcatwebapp:${env.BUILD_ID}"
+                //sh "/usr/local/bin/docker build . -t tomcatwebapp:${env.BUILD_ID}"
             }
         }
     }
