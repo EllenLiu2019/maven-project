@@ -41,6 +41,7 @@ pipeline{
 
          regexpFilterText: '$action',
          regexpFilterExpression: '^(opened|reopened|synchronize)$'
+
         )
     }
 
