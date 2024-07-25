@@ -1,5 +1,10 @@
 
 def jobName = env.JOB_NAME.split("/")[-1]
+def GIT_PROJECT = "FIXME"
+def GitRepo = "FIXME"
+def FEATURE_BRANCH = "FIXME"
+def CURRENT_BRANCH = "FIXME"
+
 
 pipeline{
     agent any
