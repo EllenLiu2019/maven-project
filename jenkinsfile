@@ -58,10 +58,10 @@ pipeline{
         stage('Build'){
             steps {
                 sh '''
-                    echo jobName: $jobName
-                    echo FEATURE_BRANCH: $FEATURE_BRANCH
-                    echo CURRENT_BRANCH: $CURRENT_BRANCH
-                    echo action: $action
+                    echo jobName: ${jobName}
+                    echo FEATURE_BRANCH: ${FEATURE_BRANCH}
+                    echo CURRENT_BRANCH: ${CURRENT_BRANCH}
+                    echo action: ${action}
                 '''
                 //sh 'mvn clean package'
                 //sh "/usr/local/bin/docker build . -t tomcatwebapp:${env.BUILD_ID}"
