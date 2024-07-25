@@ -41,7 +41,9 @@ pipeline{
          shouldNotFlatten: false,
 
          regexpFilterText: '$action',
+
          regexpFilterExpression: opened
+
         )
     }
 
