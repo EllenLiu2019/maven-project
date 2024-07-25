@@ -1,8 +1,9 @@
 
 def jobName = env.JOB_NAME.split("/")[-1]
-def action = "FIXME"
 def FEATURE_BRANCH = "FIXME"
 def CURRENT_BRANCH = "FIXME"
+
+def opened = "opened"
 
 
 pipeline{
@@ -40,7 +41,8 @@ pipeline{
          shouldNotFlatten: false,
 
          regexpFilterText: '$action',
-         regexpFilterExpression: '^(opened|reopened|synchronize)$'
+
+         regexpFilterExpression: opened
 
         )
     }
@@ -55,9 +57,13 @@ pipeline{
         } */
         stage('Build'){
             steps {
-                echo "jobName: ${jobName}, action: ${action}, FEATURE_BRANCH: ${FEATURE_BRANCH}, CURRENT_BRANCH: ${CURRENT_BRANCH}"
-                sh 'mvn clean package'
-                echo "Building ${branch}......"
+                sh '''
+                    echo jobName: $jobName
+                    echo FEATURE_BRANCH: $FEATURE_BRANCH
+                    echo CURRENT_BRANCH: $CURRENT_BRANCH
+                    echo action: $action
+                '''
+                //sh 'mvn clean package'
                 //sh "/usr/local/bin/docker build . -t tomcatwebapp:${env.BUILD_ID}"
             }
         }
