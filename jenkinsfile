@@ -34,9 +34,9 @@ pipeline{
          silentResponse: false,
          shouldNotFlatten: false,
 
-         regexpFilterText: '${jobName}',
+         regexpFilterText: '$action',
 
-         regexpFilterExpression: jobName
+         regexpFilterExpression: '*'
 
         )
     }
