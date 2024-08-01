@@ -34,9 +34,9 @@ pipeline{
          silentResponse: false,
          shouldNotFlatten: false,
 
-         regexpFilterText: '${action}',
+         regexpFilterText: '${FEATURE_BRANCH}'.split("/")[-1],
 
-         regexpFilterExpression: '*'
+         regexpFilterExpression: jobName
 
         )
     }
