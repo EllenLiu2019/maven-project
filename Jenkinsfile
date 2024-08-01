@@ -34,7 +34,7 @@ pipeline{
          silentResponse: false,
          shouldNotFlatten: false,
 
-         regexpFilterText: '$action',
+         regexpFilterText: '${action}',
 
          regexpFilterExpression: '*'
 
