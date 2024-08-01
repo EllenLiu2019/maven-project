@@ -1,5 +1,10 @@
 
 def jobName = env.JOB_NAME.split("/")[-1]
+def FEATURE_BRANCH = "FIXME"
+def CURRENT_BRANCH = "FIXME"
+
+def opened = "opened"
+
 
 pipeline{
     agent any
@@ -23,7 +28,7 @@ pipeline{
           [key: 'CURRENT_BRANCH', value: '$.pull_request.base.ref']
          ],
 
-         causeString: 'Triggered on pull request $action',
+         causeString: 'Triggered on $action',
 
          token: 'abc123',
          tokenCredentialId: '',
