@@ -1,10 +1,5 @@
 
 def jobName = env.JOB_NAME.split("/")[-1]
-def FEATURE_BRANCH = "FIXME"
-def CURRENT_BRANCH = "FIXME"
-
-def opened = "opened"
-
 
 pipeline{
     agent any
@@ -28,7 +23,7 @@ pipeline{
           [key: 'CURRENT_BRANCH', value: '$.pull_request.base.ref']
          ],
 
-         causeString: 'Triggered on $action',
+         causeString: 'Triggered on pull request $action',
 
          token: 'abc123',
          tokenCredentialId: '',
@@ -41,7 +36,9 @@ pipeline{
          shouldNotFlatten: false,
 
          regexpFilterText: '$action',
-         regexpFilterExpression: opened
+
+         regexpFilterExpression: '*'
+
         )
     }
 
@@ -55,12 +52,10 @@ pipeline{
         } */
         stage('Build'){
             steps {
-                sh '''
-                    echo jobName: "${jobName}"
-                    echo FEATURE_BRANCH: "${FEATURE_BRANCH}"
-                    echo CURRENT_BRANCH: "${CURRENT_BRANCH}"
-                    echo action: "${action}"
-                '''
+                echo "jobName: ${jobName}"
+                echo "FEATURE_BRANCH: ${FEATURE_BRANCH}"
+                echo "CURRENT_BRANCH: ${CURRENT_BRANCH}"
+                echo "action: ${action}"
                 //sh 'mvn clean package'
                 //sh "/usr/local/bin/docker build . -t tomcatwebapp:${env.BUILD_ID}"
             }
