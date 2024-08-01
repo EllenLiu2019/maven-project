@@ -1,10 +1,5 @@
 
 def jobName = env.JOB_NAME.split("/")[-1]
-def FEATURE_BRANCH = "FIXME"
-def CURRENT_BRANCH = "FIXME"
-
-def opened = "opened"
-
 
 pipeline{
     agent any
@@ -28,7 +23,7 @@ pipeline{
           [key: 'CURRENT_BRANCH', value: '$.pull_request.base.ref']
          ],
 
-         causeString: 'Triggered on $action',
+         causeString: 'Triggered on pull request $action',
 
          token: 'abc123',
          tokenCredentialId: '',
@@ -42,7 +37,7 @@ pipeline{
 
          regexpFilterText: '$action',
 
-         regexpFilterExpression: opened
+         regexpFilterExpression: '*'
 
         )
     }
