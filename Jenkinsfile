@@ -42,20 +42,21 @@ pipeline{
     }
 
     stages {
-        /* stage('Init') {
+        stage('Init') {
             steps {
                 timeout(time: 60, unit: 'SECONDS'){
                     input message: 'approve to build job'
                 }
-            }
-        } */
-        stage('Build'){
-            steps {
                 echo "jobName: ${jobName}"
                 echo "FEATURE_BRANCH: ${FEATURE_BRANCH}"
                 echo "CURRENT_BRANCH: ${CURRENT_BRANCH}"
                 echo "action: ${action}"
-                //sh 'mvn clean package'
+            }
+        }
+        stage('Build'){
+            steps {
+
+                sh 'mvn clean package'
                 //sh "/usr/local/bin/docker build . -t tomcatwebapp:${env.BUILD_ID}"
             }
         }
